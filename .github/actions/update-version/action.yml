@@ -16,10 +16,7 @@ runs:
   using: "composite"
   steps:
     - name: Thing
-      run: |
-        import process from 'node:process';
-
-        console.log(process.env)
-      shell: node
+      run: version.sh
+      shell: bash
       env:
         files: ${{ inputs.files }}
