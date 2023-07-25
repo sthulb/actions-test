@@ -15,6 +15,10 @@ inputs:
 runs:
   steps:
     - name: Thing
-      run: echo "oh hai"
+      run: |
+        import process from 'node:process';
+
+        console.log(process.env)
+      shell: node
       env:
         files: ${{ inputs.files }}
