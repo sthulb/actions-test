@@ -15,4 +15,6 @@ inputs:
 runs:
   steps:
     - name: Thing
-      run: echo "oh hai: ${{ inputs.files }}"
+      run: echo "oh hai: ${files}"
+      env:
+        files: ${{ inputs.files }}
