@@ -13,6 +13,7 @@ inputs:
     required: true
 
 runs:
+  using: "composite"
   steps:
     - name: Thing
       run: |
