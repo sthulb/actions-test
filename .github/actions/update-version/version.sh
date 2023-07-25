@@ -24,9 +24,15 @@ function end_span() {
 }
 
 function files_list_parser() {
-  for p in $(echo $1 | sed "s/,/ /g"); do
-    echo $p
+  for glob in $(echo $1 | sed "s/,/ /g"); do
+    for p in $glob; do
+      replace_version $p
+    done
   done
+}
+
+function replace_version() {
+  notice "Replacing version in: ${1}"
 }
 
 
