@@ -1,0 +1,20 @@
+name: Update version in a Java project
+description: Updates version numbers in specified files
+
+inputs:
+  release_version:
+    description: Version number to update to
+    required: true
+  current_version:
+    description: Version number to update from
+    required: true
+  files:
+    description: Comma seperated list of file paths to search
+    required: true
+
+runs:
+  steps:
+    - name: Thing
+      run: echo "oh hai: ${{ env.files }}"
+      env:
+        files: ${{ inputs.files }}
