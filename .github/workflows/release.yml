@@ -1,0 +1,29 @@
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Release version'
+        required: true
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code from GitHub
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
+      
+      - name: Normalize Version Number
+        run: echo "VERSION=$(echo ${{ inputs.release_version }} | sed 's/v//')" >> $GITHUB_ENV
+
+      - name: Set current release version env variable
+        run: echo "CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+
+      - name: Version code with release version
+        uses: ./.github/actions/update-version
+        env:
+          current_version: ${{ env.CURRENT_VERSION }}
+        with:
+          release_version: ${{ inputs.release_version }}
+          current_version: ${{ env.current_version }}
+          files: "mkdocs.yml,pom.xml,**/*pom.xml,**/*build.gradle,README.md"
+
