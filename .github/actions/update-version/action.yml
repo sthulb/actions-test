@@ -15,8 +15,10 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Thing
+    - id: Thing
+      name: Thing
       run: version.sh
       shell: bash
+      working-directory: ${{ env.GITHUB_WORKSPACE }}
       env:
         files: ${{ inputs.files }}
