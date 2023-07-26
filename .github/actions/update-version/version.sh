@@ -1,5 +1,21 @@
 #!/bin/bash
 
+function has_required_config() {
+    start_span "Validating required config"
+    test -z "${current_version}" && error "current_version env must be set"
+    test -z "${release_version}" && error "release_version env must be set"
+    # test -z "${GH_TOKEN}" && error "GH_TOKEN env must be set for GitHub CLI"
+
+    # Default GitHub Actions Env Vars: https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+    debug "Are we running in GitHub Action environment?"
+    test -z "${GITHUB_RUN_ID}" && error "GITHUB_RUN_ID env must be set to trace Workflow Run ID back to PR"
+    test -z "${GITHUB_SERVER_URL}" && error "GITHUB_SERVER_URL env must be set to trace Workflow Run ID back to PR"
+    test -z "${GITHUB_REPOSITORY}" && error "GITHUB_REPOSITORY env must be set to trace Workflow Run ID back to PR"
+
+    debug "Config validated successfully!"
+    end_span
+}
+
 # Sets GitHub Action with error message to ease troubleshooting
 function error() {
     echo "::error file=${FILENAME}::$1"
@@ -40,6 +56,8 @@ function replace_version() {
 
 
 function main() {
+  has_required_config
+
   notice "Updating version from ${current_version} to ${release_version} in files: ${files}"
 
   files_list_parser "${files}"

@@ -22,6 +22,7 @@ jobs:
         uses: ./.github/actions/update-version
         env:
           current_version: ${{ env.CURRENT_VERSION }}
+          release_version: ${{ inputs.release_version }}
         with:
           release_version: ${{ inputs.release_version }}
           current_version: ${{ env.current_version }}
