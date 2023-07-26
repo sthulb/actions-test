@@ -25,5 +25,5 @@ jobs:
         with:
           release_version: ${{ inputs.release_version }}
           current_version: ${{ env.current_version }}
-          files: "mkdocs.yml,pom.xml,**/*pom.xml,**/*build.gradle,README.md"
+          files: "mkdocs.yml,pom.xml,**/*pom.xml,README.md"
 
