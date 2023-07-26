@@ -11,16 +11,20 @@ jobs:
   update-version:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code from GitHub
+      - id: checkout
+        name: Checkout code from GitHub
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
       
-      - name: Normalize Version Number
+      - id: normalize-version
+        name: Normalize Version Number
         run: echo "VERSION=$(echo ${{ inputs.release_version }} | sed 's/v//')" >> $GITHUB_ENV
 
-      - name: Set current release version env variable
+      - id: set-version
+        name: Set current release version env variable
         run: echo "CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
-      - name: Version code with release version
+      - id: change-version
+        name: Version code with release version
         uses: ./.github/actions/update-version
         env:
           current_version: ${{ env.CURRENT_VERSION }}
@@ -30,3 +34,10 @@ jobs:
           current_version: ${{ env.current_version }}
           files: "mkdocs.yml,pom.xml,**/*pom.xml,README.md"
 
+  build:
+    runs-on: ubuntu-latest
+    needs: update-version
+    steps:
+      - id: test
+        name: test
+        run: ls -laR .
