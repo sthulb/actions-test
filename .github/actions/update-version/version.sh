@@ -40,6 +40,8 @@ function replace_version() {
 
 
 function main() {
+  notice "Updating version from ${current_version} to ${release_version} in files: ${files}"
+
   files_list_parser "${files}"
 }
 
