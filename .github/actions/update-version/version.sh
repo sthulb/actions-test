@@ -51,7 +51,6 @@ function replace_version() {
   notice "Replacing version in: ${1}"
 
   sed -i "s/${current_version}/${release_version}/g" ${1}
-  cat $1
 }
 
 
