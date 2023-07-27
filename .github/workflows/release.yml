@@ -6,6 +6,11 @@ on:
       release_version:
         description: 'Release version'
         required: true
+      create_release:
+        description: 'Push release to Maven Central?'
+        type: boolean
+        default: false
+        required: false
 
 jobs:
   update-version:
@@ -66,3 +71,29 @@ jobs:
       - id: build-with-maven
         name: Build with Maven
         run: mvn -B install --file pom.xml
+
+  publish:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.create_release == 'true' }}
+    environment: Release
+    needs: [update-version, build]
+    steps:
+      - id: setup-java 
+        name: Setup java
+        uses: actions/setup-java@cd89f46ac9d01407894225f350157564c9c7cee2
+        with:
+          distribution: 'zulu'
+          java-version: 8
+          server-id: ossrh
+          server-username: ${{ secrets.MAVEN_USERNAME }}
+          server-password: ${{ secrets.MAVEN_PASSWORD }}
+          gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }} # Value of the GPG private key to import
+          gpg-passphrase: GPG_PASSPHRASE # env variable for GPG private key passphrase
+
+      - id: build-and-release-with-maven
+        name: Build with Maven
+        run: mvn -Prelease clean deploy -DskipTests
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_JIRA_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_JIRA_PASSWORD }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
