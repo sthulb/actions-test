@@ -41,7 +41,12 @@ function end_span() {
 
 function files_list_parser() {
   for glob in $(echo $1 | sed "s/,/ /g"); do
-    for p in $glob; do
+    ARG="-name"
+    if [[ "${glob}" == *"/"* ]]; then
+      ARG="-wholename"
+    fi
+
+    for p in $(eval find . $ARG $glob); do
       replace_version $p
     done
   done
