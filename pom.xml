@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>software.amazon.lambda</groupId>
+    <groupId>xyz.acme.foo</groupId>
     <artifactId>powertools-parent</artifactId>
     <version>1.17.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -27,19 +27,7 @@
     </licenses>
 
     <modules>
-        <module>powertools-core</module>
-        <module>powertools-serialization</module>
-        <module>powertools-logging</module>
-        <module>powertools-tracing</module>
-        <module>powertools-sqs</module>
-        <module>powertools-metrics</module>
-        <module>powertools-parameters</module>
-        <module>powertools-validation</module>
-        <module>powertools-test-suite</module>
-        <module>powertools-cloudformation</module>
-        <module>powertools-idempotency</module>
-        <module>powertools-e2e-tests</module>
-        <module>examples</module>
+        <module>powertools-examples-sqs</module>
     </modules>
 
     <scm>
@@ -92,27 +80,27 @@
             <dependency>
                 <groupId>software.amazon.lambda</groupId>
                 <artifactId>powertools-core</artifactId>
-                <version>${project.version}</version>
+                <version>1.17.0</version>
             </dependency>
             <dependency>
                 <groupId>software.amazon.lambda</groupId>
                 <artifactId>powertools-serialization</artifactId>
-                <version>${project.version}</version>
+                <version>1.17.0</version>
             </dependency>
             <dependency>
                 <groupId>software.amazon.lambda</groupId>
                 <artifactId>powertools-logging</artifactId>
-                <version>${project.version}</version>
+                <version>1.17.0</version>
             </dependency>
             <dependency>
                 <groupId>software.amazon.lambda</groupId>
                 <artifactId>powertools-sqs</artifactId>
-                <version>${project.version}</version>
+                <version>1.17.0</version>
             </dependency>
             <dependency>
                 <groupId>software.amazon.lambda</groupId>
                 <artifactId>powertools-tracing</artifactId>
-                <version>${project.version}</version>
+                <version>1.17.0</version>
             </dependency>
             <dependency>
                 <groupId>com.amazonaws</groupId>
