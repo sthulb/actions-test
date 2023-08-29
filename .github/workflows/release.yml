@@ -9,7 +9,7 @@ on:
       create_release:
         description: 'Push release to Maven Central?'
         type: boolean
-        default: false
+        default: true
         required: false
 
 jobs:
@@ -52,7 +52,8 @@ jobs:
     strategy:
       max-parallel: 5
       matrix:
-        java: [8, 11, 15, 16, 17, 18, 19, 20 ]
+        java: [8]
+        #java: [8, 11, 15, 16, 17, 18, 19, 20 ]
     steps:
       - id: download-artifact
         name: Download artifact
