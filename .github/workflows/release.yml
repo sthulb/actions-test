@@ -77,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     # if: ${{ inputs.create_release == 'true' }}
     environment: Release
-    # needs: [update-version, build]
+    needs: build
     steps:
       - id: setup-java 
         name: Setup java
