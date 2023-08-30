@@ -12,6 +12,9 @@ on:
         default: true
         required: false
 
+env:
+  RELEASE_COMMIT: ${{ github.sha }}
+
 jobs:
   update-version:
     runs-on: ubuntu-latest
@@ -52,8 +55,7 @@ jobs:
     strategy:
       max-parallel: 5
       matrix:
-        java: [8]
-        #java: [8, 11, 15, 16, 17, 18, 19, 20 ]
+        java: [8, 11, 15, 16, 17, 18, 19, 20 ]
     steps:
       - id: download-artifact
         name: Download artifact
@@ -75,7 +77,7 @@ jobs:
 
   publish:
     runs-on: ubuntu-latest
-    # if: ${{ inputs.create_release == 'true' }}
+    if: ${{ inputs.create_release == 'true' }}
     environment: Release
     needs: build
     steps:
@@ -104,3 +106,39 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+  create_tag:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744  # v3.6.0
+        with:
+          ref: ${{ env.RELEASE_COMMIT }}
+
+      # NOTE: we need actions/checkout to authenticate and configure git first
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744  # v3.6.0
+        with:
+          ref: ${{ env.RELEASE_COMMIT }}
+
+      - id: download-artifact
+        name: Download artifact
+        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a
+        with:
+          name: workspace
+
+      - id: setup-git
+        name: Git client setup and refresh tip
+        run: |
+          git config user.name "Powertools for AWS Lambda (Java) bot"
+          git config user.email "aws-lambda-powertools-feedback@amazon.com"
+          git config remote.origin.url >&-
+
+      - name: Create Git Tag
+        run: |
+          git commit -am "chore: version bump"
+          git tag -a v"${RELEASE_VERSION}" -m "release_version: v${RELEASE_VERSION}"
+          git push origin v"${RELEASE_VERSION}"
+        env:
+          RELEASE_VERSION: ${{ inputs.release_version }}
