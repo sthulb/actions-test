@@ -15,6 +15,10 @@ on:
 env:
   RELEASE_COMMIT: ${{ github.sha }}
 
+permissions:
+  id-token: write
+  contents: write
+
 jobs:
   update-version:
     runs-on: ubuntu-latest
@@ -135,10 +139,10 @@ jobs:
         name: Show git status
         run: git status
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        with:
-          limit-access-to-actor: true
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
+      #   with:
+      #     limit-access-to-actor: true
 
       - name: Create Git Tag
         run: |
