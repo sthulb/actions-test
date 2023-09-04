@@ -29,7 +29,9 @@ jobs:
 
       - id: set-version
         name: Set current release version env variable
-        run: echo "CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+        run: |
+          echo "CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+          git status -a
 
       - id: change-version
         name: Version code with release version
@@ -125,10 +127,10 @@ jobs:
         run: |
           git config user.name "Powertools for AWS Lambda (Java) bot"
           git config user.email "aws-lambda-powertools-feedback@amazon.com"
-          git config remote.origin.url >&-
 
       - name: Create Git Tag
         run: |
+          git status -a
           git commit -am "chore: version bump"
           git tag -a v"${RELEASE_VERSION}" -m "release_version: v${RELEASE_VERSION}"
           git push origin v"${RELEASE_VERSION}"
