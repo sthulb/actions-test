@@ -111,6 +111,7 @@ jobs:
     needs: publish
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
       contents: write
     steps:
       - id: download-artifact
