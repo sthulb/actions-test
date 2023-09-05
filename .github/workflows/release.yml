@@ -5,11 +5,11 @@ on:
     inputs:
       release_version:
         description: 'Release version'
-        required: false
+        required: true
       create_release:
         description: 'Push release to Maven Central?'
         type: boolean
-        default: true
+        default: false
         required: false
 
 env:
