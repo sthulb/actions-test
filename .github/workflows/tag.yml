@@ -1,0 +1,28 @@
+name: Tag release
+run-name: Tag ${{ github.event.inputs.RELEASE_VERSION }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      RELEASE_VERSION:
+        description: 'Release version'
+        required: true
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Git config
+        run: |
+          git config --local user.name "Powertools bot"
+          git config --local user.email "aws-lambda-powertools-feedback@amazon.com"
+      - name: Tag release
+        run: |
+          git tag -f ${{ github.event.inputs.RELEASE_VERSION }} ${{ github.event.inputs.RELEASE_VERSION }}
+      - name: Push tag
+        run: |
+          git push origin ${{ github.event.inputs.RELEASE_VERSION }} --force
