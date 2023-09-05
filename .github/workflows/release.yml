@@ -55,7 +55,9 @@ jobs:
         uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce
         with:
           name: workspace
-          path: .
+          path: |
+            .
+            !.git/*
 
   build:
     runs-on: ubuntu-latest
@@ -122,7 +124,14 @@ jobs:
       id-token: write
       contents: write
     steps:
-      - id: download-artifact
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - id  : download-artifact
         name: Download artifact
         uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a
         with:
@@ -133,7 +142,6 @@ jobs:
         run: |
           git config user.name "Powertools for AWS Lambda (Java) bot"
           git config user.email "aws-lambda-powertools-feedback@amazon.com"
-          git config remote.origin.url >&-
             
       - id: status
         name: Show git status
@@ -148,6 +156,6 @@ jobs:
         run: |
           git commit -am "chore: version bump"
           git tag -a v"${RELEASE_VERSION}" -m "release_version: v${RELEASE_VERSION}"
-          git push origin v"${RELEASE_VERSION}"
+          git push origin v"${RELEASE_VERSION}" --force
         env:
           RELEASE_VERSION: ${{ inputs.release_version }}
