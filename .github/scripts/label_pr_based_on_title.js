@@ -25,14 +25,7 @@ module.exports = async ({github, context, core}) => {
             const matches = matcher.exec(PR_TITLE)
             if (matches != null) {
                 core.info(`Auto-labeling PR ${PR_NUMBER} with ${label}`)
-                 Object.keys(labels).forEach(async (label) => {
-                    await github.rest.issues.removeLabel({
-                        issue_number: PR_NUMBER,
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        name: label
-                    })
-                })
+                console.log("labels", process.env.PR_LABELS)
                 
                 await github.rest.issues.addLabels({
                     issue_number: PR_NUMBER,
