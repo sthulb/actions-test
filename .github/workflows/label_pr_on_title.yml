@@ -25,6 +25,7 @@ on:
     workflows: ["Record PR details"]
     types:
       - completed
+  workflow_dispatch: {}
 
 permissions:
   contents: read
