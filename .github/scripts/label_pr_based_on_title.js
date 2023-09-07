@@ -21,7 +21,7 @@ module.exports = async ({github, context, core}) => {
     let miss = 0;
     
     // get PR labels from env
-    const prLabels = process.env.PR_LABELS.replace("\"", "").split(",");
+    const prLabels = process.env.PR_LABELS.replaceAll("\"", "").split(",");
     const labelKeys = Object.keys(labels);
 
     core.info(`Labels on PR: ${prLabels}`);
@@ -36,7 +36,7 @@ module.exports = async ({github, context, core}) => {
                 for (const prLabel of prLabels) {
                     core.info(`evaluating label: ${prLabel}`)
                     core.info(`keys: ${labelKeys}`)
-                    if (labelKeys.includes(prLabel)) {
+                    if (labelKeys.includes(prLabel) && prLabel !== label) {
                         core.info(`${prLabel} is a reserved label, we should remove it.`);
                         await github.rest.issues.removeLabel({
                             issue_number: PR_NUMBER,
