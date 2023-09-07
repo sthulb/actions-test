@@ -13,7 +13,7 @@ module.exports = async ({github, context, core}) => {
     });
     
     try {
-        fs.writeFileSync(`./${filename}`, JSON.stringify({...context.payload, ...{labels:labels}}));
+        fs.writeFileSync(`./${filename}`, JSON.stringify({...context.payload, ...{labels:labels.join(",")}}));
 
         return `PR successfully saved ${filename}`
     } catch (err) {
