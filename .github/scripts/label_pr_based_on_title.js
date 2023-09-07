@@ -21,7 +21,7 @@ module.exports = async ({github, context, core}) => {
     let miss = 0;
     
     // get PR labels from env
-    const prLabels = process.env.PR_LABELS.split(",");
+    const prLabels = process.env.PR_LABELS.replace("\"", "").split(",");
     const labelKeys = Object.keys(labels);
 
     core.info(`Labels on PR: ${prLabels}`);
