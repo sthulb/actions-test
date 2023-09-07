@@ -8,10 +8,12 @@ module.exports = async ({github, context, core}) => {
         issue_number: (context.payload.issue || context.payload.pull_request || context.payload).number,
     });
 
-    console.log(labelsData)
+    const labels = labelsData.data.map((label) => {
+    	return label['name']; 
+    });
     
     try {
-        fs.writeFileSync(`./${filename}`, JSON.stringify(context.payload));
+        fs.writeFileSync(`./${filename}`, JSON.stringify({...context.payload, ...{labels:labels}}));
 
         return `PR successfully saved ${filename}`
     } catch (err) {
