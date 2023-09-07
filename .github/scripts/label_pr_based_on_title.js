@@ -19,13 +19,28 @@ module.exports = async ({github, context, core}) => {
 
     // Maintenance: We should keep track of modified PRs in case their titles change
     let miss = 0;
+    
+    // get PR labels from env
+    const prLabels = process.env.PR_LABELS.split(",")
+    const labelKeys = Object.keys(labels)
+    
     try {
         for (const label in labels) {
             const matcher = new RegExp(labels[label])
             const matches = matcher.exec(PR_TITLE)
             if (matches != null) {
                 core.info(`Auto-labeling PR ${PR_NUMBER} with ${label}`)
-                console.log("labels", process.env.PR_LABELS)
+
+                for (const prLabel in prLabels) {
+                    if (labelKeys.includes(prLabel)) {
+                        await github.rest.issues.removeLabel({
+                            issue_number: PR_NUMBER,
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            name: prLabel
+                        })
+                    }
+                }
                 
                 await github.rest.issues.addLabels({
                     issue_number: PR_NUMBER,
