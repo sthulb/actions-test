@@ -33,7 +33,7 @@ module.exports = async ({github, context, core}) => {
             if (matches != null) {
                 core.info(`Auto-labeling PR ${PR_NUMBER} with ${label}`)
 
-                for (const prLabel in prLabels) {
+                prLabels.forEach((i, prLabel) => {
                     core.info(`evaluating label: ${prLabel}`)
                     if (labelKeys.includes(prLabel)) {
                         core.info(`${prLabel} is a reserved label, we should remove it.`);
@@ -44,7 +44,7 @@ module.exports = async ({github, context, core}) => {
                             name: prLabel
                         })
                     }
-                }
+                })
                 
                 await github.rest.issues.addLabels({
                     issue_number: PR_NUMBER,
