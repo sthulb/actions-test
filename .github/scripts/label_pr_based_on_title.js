@@ -35,6 +35,7 @@ module.exports = async ({github, context, core}) => {
 
                 for (const prLabel of prLabels) {
                     core.info(`evaluating label: ${prLabel}`)
+                    core.info(`keys: ${labelKeys}`)
                     if (labelKeys.includes(prLabel)) {
                         core.info(`${prLabel} is a reserved label, we should remove it.`);
                         await github.rest.issues.removeLabel({
